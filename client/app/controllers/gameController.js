@@ -10,7 +10,7 @@
     ///////////////////////////
 
     function init() {
-      enterRoom($stateParams.gameId);
+      roomService.enterRoom($stateParams.gameId);
       createChairs(roomService.getParticipents() - 1);
       roomService.setTimer(1000, 3000);
 
@@ -22,7 +22,7 @@
     }
 
     function timerAction(newVal, oldVal) {
-      $scope.on('chair-clicked', clickAction);
+      $scope.$on('chair-clicked', clickAction);
     }
 
     function clickAction(event, args) {
