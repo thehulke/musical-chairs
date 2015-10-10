@@ -4,8 +4,8 @@
   // Setting const empty room value
   var emptyRoomConst = {
     gameStart: false,
-    timer: false,
-    players: []
+    timer: 0,
+    players: [],
   };
 
   angular.module('chairGame', ['angular-meteor', 'ui.router', 'ngAnimate', 'ngCookies'])

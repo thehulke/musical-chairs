@@ -27,6 +27,11 @@
 
     function setTimer(min, max) {
       //
+      var randTimeOut = (Math.random() * (max - min)) + min;
+      console.log(randTimeOut);
+      var timeOutDate = Math.round((new Date()).getTime() / 1000);
+      console.log(timeOutDate);
+      return Room.update(roomId, {timer: timeOutDate + randTimeOut});
     }
 
     function getParticipents() {
@@ -57,7 +62,9 @@
 
     function addPlayer(roomId, playerDetails) {
 
-      var room = Room.findOne({_id:roomId});
+      var room = Room.findOne({
+        _id: roomId,
+      });
       var player = playerDetails;
       player._id = Random.id();
 
