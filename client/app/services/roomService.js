@@ -1,9 +1,9 @@
 (function(angular) {
 
   angular.module('chairGame')
-    .factory('roomService', [roomService]);
+    .factory('roomService', ['$meteor', roomService]);
 
-  function roomService() {
+  function roomService($meteor) {
     var roomId;
 
     service = {
@@ -35,8 +35,8 @@
     }
 
     function getParticipents() {
-      // var room = Room.findOne({_id:roomId});
-      // return 1;
+      var room = $meteor.object(Room, roomId);
+      return room.players.length;
     }
 
     function enterRoom(newRoomId) {
@@ -44,15 +44,11 @@
     }
 
     function findEmpty() {
-      return Room.find({
-        gameStart: false,
-      }).fetch();
+      return $meteor.collection(Room, {gameStart: false,});
     }
 
     function findOneEmpty() {
-      return Room.findOne({
-        gameStart: false,
-      });
+      return $meteor.collection(Room, {gameStart: false,})[0];
     }
 
     function create(roomDetails) {
@@ -63,9 +59,7 @@
 
     function addPlayer(roomId, playerDetails) {
 
-      var room = Room.findOne({
-        _id: roomId,
-      });
+      var room = $meteor.object(Room, roomId);
       var player = playerDetails;
       player._id = Random.id();
 
@@ -76,7 +70,7 @@
       Session.set('currentPlayer', player._id);
       room.players.push(player);
 
-      return Room.update(roomId, room);
+      return room;
     }
 
   }

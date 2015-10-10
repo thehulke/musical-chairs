@@ -1,4 +1,5 @@
-Meteor.startup(function() {
+  // Room.remove({});
+  Meteor.startup(function() {
   if (Room.find().count() === 0) {
     var room = [{
       "gameStart": false,

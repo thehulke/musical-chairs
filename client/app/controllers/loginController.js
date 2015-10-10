@@ -5,10 +5,11 @@
     .controller('LoginCtrl', ['roomService', '$state', 'EMPTYROOM', LoginCtrl]);
 
   function LoginCtrl(roomService, $state, EMPTYROOM) {
+    var _this = this;
 
-    this.playAsGuest = function() {
+    _this.playAsGuest = function() {
       var freeRoom = roomService.findOneEmpty();
-      var playerName = this.playerName;
+      var playerName = _this.playerName;
       var gameId;
       var playerId;
       var emptyRoom;
