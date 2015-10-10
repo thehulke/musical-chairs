@@ -10,7 +10,7 @@
 
     _this.room = $meteor.object(Room, $stateParams.gameId);
     _this.clickable = false;
-    _this.playersList = [];
+    _this.playersList = removeNullPlayers(_this.room.players);
 
     init();
 
