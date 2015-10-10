@@ -2,9 +2,9 @@
   console.log('game controller');
 
   angular.module('chairGame')
-    .controller('GameCtrl', ['$scope', 'roomService', '$stateParams', '$timeout', '$meteor', '$rootScope', GameCtrl]);
+    .controller('GameCtrl', ['$scope', 'roomService', '$stateParams', '$state', '$timeout', '$meteor', '$rootScope', GameCtrl]);
 
-  function GameCtrl($scope, roomService, $stateParams, $timeout, $meteor, $rootScope) {
+  function GameCtrl($scope, roomService, $stateParams, $state, $timeout, $meteor, $rootScope) {
     var _this = this;
     var eventRun = false;
 
@@ -94,6 +94,7 @@
     }
 
     function restartGame() {
+      $state.go('login');
     }
 
     function removeNullPlayers(playersList) {

@@ -9,7 +9,7 @@
     chairs: [],
   };
 
-  angular.module('chairGame', ['angular-meteor', 'ui.router', 'ngAnimate', 'ngCookies'])
+  angular.module('chairGame', ['angular-meteor', 'ui.router', 'ngAnimate'])
     .constant('MAXPLAYERS', 4)
     .constant('EMPTYROOM', emptyRoomConst);
 
