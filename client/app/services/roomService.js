@@ -26,12 +26,17 @@
     }
 
     function setTimer(min, max) {
-      //
-      // var randTimeOut = (Math.random() * (max - min)) + min;
-      // console.log(randTimeOut);
-      // var timeOutDate = Math.round((new Date()).getTime() / 1000);
-      // console.log(timeOutDate);
-      // return Room.update(roomId, {timer: timeOutDate + randTimeOut});
+
+      var room = $meteor.object(Room, roomId, false);
+      var randTimeOut = (Math.random() * (max - min)) + min;
+      console.log(randTimeOut);
+      var timeOutDate = Math.round((new Date()).getTime() / 1000);
+      console.log(timeOutDate);
+      if (room.gameStart) {
+        room.timer = Math.floor(timeOutDate + randTimeOut);
+        room.save();
+      }
+
     }
 
     function getParticipents() {
@@ -44,11 +49,15 @@
     }
 
     function findEmpty() {
-      return $meteor.collection(Room, {gameStart: false,});
+      return $meteor.collection(Room, {
+        gameStart: false,
+      });
     }
 
     function findOneEmpty() {
-      return $meteor.object(Room, {gameStart: false}, false);
+      return $meteor.object(Room, {
+        gameStart: false,
+      }, false);
     }
 
     function create(roomDetails) {
