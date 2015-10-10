@@ -5,5 +5,5 @@
 * Ui.router
 * ngAnimate
 
-[Play Aplha](http://musical-chairs.meteor.com)
+[Play Alpha](http://musical-chairs.meteor.com)
 
