@@ -10,6 +10,7 @@
 
     _this.room = $meteor.object(Room, $stateParams.gameId);
     _this.clickable = false;
+    _this.playersList = [];
 
     init();
 
@@ -33,6 +34,17 @@
       },
 
       true);
+
+      $scope.$watch(function() {
+        return _this.room.players;
+      },
+
+      function(newVal, oldVal) {
+        _this.playersList = removeNullPlayers(_this.room.players);
+      },
+
+      true);
+
     }
 
     function timerWatcher() {
@@ -82,7 +94,19 @@
     }
 
     function restartGame() {
+    }
 
+    function removeNullPlayers(playersList) {
+      var i;
+      var newArr = [];
+
+      for (i = 0; i < playersList.length; i++) {
+        if (playersList[i]) {
+          newArr.push(playersList[i]);
+        }
+      }
+
+      return newArr;
     }
 
     function announceWinners() {
@@ -101,8 +125,12 @@
       } else {
         alert('you lose :(');
         for (j = 0; j < _this.room.players.length; j++) {
-          _this.room.players.splice(j, 1);
+          if (_this.room.players[j] && Session.get('currentPlayer') === _this.room.players[j]._id) {
+            _this.room.players[j] = null;
+            break;
+          }
         }
+
       }
 
     }

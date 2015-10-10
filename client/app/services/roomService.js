@@ -27,7 +27,6 @@
     }
 
     function setTimer(min, max) {
-
       var room = $meteor.object(Room, roomId, false);
       var randTimeOut = (Math.random() * (max - min)) + min;
       var timeOutDate = Date.now();
