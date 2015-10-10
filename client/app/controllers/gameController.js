@@ -2,12 +2,11 @@
   console.log('game controller');
 
   angular.module('chairGame')
-    .controller('GameCtrl', ['$scope', 'roomService', '$stateParams', '$interval', GameCtrl]);
+    .controller('GameCtrl', ['$scope', 'roomService', '$stateParams', '$interval', '$meteor', GameCtrl]);
 
-  function GameCtrl($scope, roomService, $stateParams, $interval) {
+  function GameCtrl($scope, roomService, $stateParams, $interval, $meteor) {
     var _this = this;
-
-    _this.chairsNumber = 0;
+    _this.room = $meteor.object(Room, $stateParams.gameId);
 
     init();
 
@@ -15,16 +14,13 @@
 
     function init() {
       roomService.enterRoom($stateParams.gameId);
-      _this.chairsNumber = roomService.getParticipents() - 1;
       roomService.setTimer(1000, 3000);
 
       $scope.$watch(timerWatcher, timerAction, true);
     }
 
     function timerWatcher() {
-      var room = roomService.getRoomId();
       return roomService.getTimer(); // TODO: set timer interval
-
     }
 
     function timerAction(newVal, oldVal) {

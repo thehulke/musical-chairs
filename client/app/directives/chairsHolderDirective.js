@@ -17,6 +17,8 @@
     ////////////////////////////
 
     function chairHolderDirectiveLink(scope, elem, attrs) {
+      var currentChairs = 0;
+
       scope.$watch(numberOfChairs,
         changeChairs
       );
@@ -28,8 +30,14 @@
       function changeChairs(newVal, oldVal) {
         var i;
 
-        for (i = 1; i <= newVal; i++) {
-          elem.append($compile('<chair-directive></chair-directive>')(scope));
+        if (newVal > currentChairs) {
+          elem.children().remove();
+
+          for (i = 1; i <= newVal; i++) {
+            elem.append($compile('<chair-directive></chair-directive>')(scope));
+          }
+
+          currentChairs = newVal;
         }
       }
 
