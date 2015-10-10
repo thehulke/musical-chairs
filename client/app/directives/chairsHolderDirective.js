@@ -9,7 +9,7 @@
       restrict: 'E',
       template: '',
       scope: {
-        number: '=',
+        number: '@',
       },
       link: chairHolderDirectiveLink,
     };

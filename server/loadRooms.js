@@ -1,4 +1,4 @@
-Room.remove({});
+// Room.remove({});
 Meteor.startup(function() {
   if (Room.find().count() === 0) {
     var room = [{
