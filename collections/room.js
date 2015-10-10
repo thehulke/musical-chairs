@@ -1,4 +1,4 @@
-Room = new Mongo.Collection("rooms");
+Room = new Mongo.Collection('rooms');
 
 /**
 Room {

@@ -6,24 +6,22 @@
 
   function LoginCtrl(roomService, $state) {
 
-
     this.playAsGuest = function() {
       var freeRoom = roomService.findOneEmpty();
       var playerName = this.playerName;
       var gameId;
 
-      if(!freeRoom) {
-        gameId = roomService.create({gameStart: false, players: [{"name" : playerName}]});
+      if (!freeRoom) {
+        gameId = roomService.create({gameStart: false, players: [{name: playerName}]});
       } else {
         gameId = freeRoom._id;
         roomService.addPlayer(freeRoom._id, {
-          name: playerName
+          name: playerName,
         });
       }
-      $state.go('game',{id: gameId});
+
+      $state.go('game', {gameId: gameId});
     };
   }
-
-
 
 }(angular));
