@@ -1,0 +1,52 @@
+[{
+  "gameStart": false,
+  "players": [{
+    "_id": "string",
+    "name": "string"
+  }, {
+    "_id": "string",
+    "name": "string"
+  }, {
+    "_id": "string",
+    "name": "string"
+  }, {
+    "_id": "string",
+    "name": "string"
+  }, {
+    "_id": "string",
+    "name": "string"
+  }]
+}, {
+  "gameStart": false,
+  "players": [{
+    "_id": "string",
+    "name": "string"
+  }, {
+    "_id": "string",
+    "name": "string"
+  }, {
+    "_id": "string",
+    "name": "string"
+  }, {
+    "_id": "string",
+    "name": "string"
+  }]
+}, {
+  "gameStart": false,
+  "players": [{
+    "_id": "string",
+    "name": "string"
+  }, {
+    "_id": "string",
+    "name": "string"
+  }, {
+    "_id": "string",
+    "name": "string"
+  }, {
+    "_id": "string",
+    "name": "string"
+  }, {
+    "_id": "string",
+    "name": "string"
+  }]
+}]
