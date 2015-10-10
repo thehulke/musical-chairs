@@ -9,17 +9,19 @@
     this.playAsGuest = function() {
       var freeRoom = roomService.findOneEmpty();
       var playerName = this.playerName;
-      var gameId, playerId;
+      var gameId;
+      var playerId;
       var emptyRoom;
+
       playerId = Random.id();
 
       if (!freeRoom) {
-        angular.copy(EMPTYROOM, emptyRoom);
+        emptyRoom = angular.copy(EMPTYROOM);
         emptyRoom.players.push({
           _id: playerId,
-          name: playerName
+          name: playerName,
         });
-        
+
         gameId = roomService.create(emptyRoom);
       } else {
         gameId = freeRoom._id;

@@ -3,7 +3,7 @@
   angular.module('chairGame')
     .config(['$stateProvider', '$urlRouterProvider', router]);
 
-  function router ($stateProvider, $urlRouterProvider) {
+  function router($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise('/login');
 
     $stateProvider
@@ -11,14 +11,15 @@
       url: '/login',
       controller: 'LoginCtrl',
       controllerAs: 'login',
-      templateUrl: 'client/app/views/loginTemplate.ng.html'
-      })
-      .state('game', {
-        url: '/game/:id',
-        controller: 'GameCtrl',
-        controllerAs: 'game',
-        templateUrl: 'client/app/views/gameTemplate.ng.html'
-      });
-    }
+      templateUrl: 'client/app/views/loginTemplate.ng.html',
+    })
+    .state('game', {
+      url: '/game/:gameId',
+      controller: 'GameCtrl',
+      controllerAs: 'game',
+      templateUrl: 'client/app/views/gameTemplate.ng.html',
+    });
+
+  }
 
 }(angular));

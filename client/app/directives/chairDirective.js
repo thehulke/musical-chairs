@@ -7,8 +7,15 @@
   function chairDirective() {
     return {
       restrict: 'E',
-      template: '',
+      template: '<div class="chair">x</div>',
+      link: chairDirectiveLink,
     };
+
+    ////////////////////////////
+
+    function chairDirectiveLink(scope, elem) {
+
+    }
   }
 
 }(angular));

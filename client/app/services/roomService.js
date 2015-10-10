@@ -30,7 +30,8 @@
     }
 
     function getParticipents() {
-      //
+      // var room = Room.findOne({_id:roomId});
+      // return 1;
     }
 
     function enterRoom(newRoomId) {

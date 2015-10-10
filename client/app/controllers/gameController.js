@@ -5,13 +5,17 @@
     .controller('GameCtrl', ['$scope', 'roomService', '$stateParams', GameCtrl]);
 
   function GameCtrl($scope, roomService, $stateParams) {
+    var _this = this;
+
+    _this.chairsNumber = 0;
+
     init();
 
     ///////////////////////////
 
     function init() {
       roomService.enterRoom($stateParams.gameId);
-      createChairs(roomService.getParticipents() - 1);
+      _this.chairsNumber = roomService.getParticipents() - 1;
       roomService.setTimer(1000, 3000);
 
       $scope.$watch(timerWatcher, timerAction, true);
