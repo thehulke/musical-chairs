@@ -12,10 +12,11 @@
       var gameId;
       var playerId;
       var emptyRoom;
+
       playerId = Random.id();
 
       if (!freeRoom) {
-        angular.copy(EMPTYROOM, emptyRoom);
+        emptyRoom = angular.copy(EMPTYROOM);
         emptyRoom.players.push({
           _id: playerId,
           name: playerName,
