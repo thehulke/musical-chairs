@@ -15,6 +15,7 @@
       getParticipents: getParticipents,
       setTimer: setTimer,
       getTimer: getTimer,
+      getRoomId: getRoomId,
     };
 
     return service;
@@ -82,6 +83,9 @@
       return room;
     }
 
+    function getRoomId() {
+      return roomId;
+    }
   }
 
 }(angular));
