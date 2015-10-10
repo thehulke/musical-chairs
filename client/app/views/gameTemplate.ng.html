@@ -1,2 +1,10 @@
-<div>{{game.clickable}}</div>
-<chair-holder-directive number="{{game.playersList.length - 1}}"></chair-holder-directive>
+<div class="container-fluid game-div" ng-class="{'clickable-container': game.clickable}">
+  <div class="row">
+    <div class="col-xs-12 chairs">
+      <!-- <div class="btn-group btn-group-justified" role="group"> -->
+      <chair-holder-directive number="{{game.playersList.length - 1}}" class="btn-group btn-group-justified" role="group"></chair-holder-directive>
+      <!-- </div> -->
+    </div>
+  </div>
+
+</div>

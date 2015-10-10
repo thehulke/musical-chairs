@@ -10,7 +10,7 @@
   };
 
   angular.module('chairGame', ['angular-meteor', 'ui.router', 'ngAnimate', 'ngCookies'])
-    .constant('MAXPLAYERS', 2)
+    .constant('MAXPLAYERS', 4)
     .constant('EMPTYROOM', emptyRoomConst);
 
 }(angular));

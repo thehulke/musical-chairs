@@ -7,7 +7,7 @@
   function chairDirective() {
     return {
       restrict: 'E',
-      template: '<button class="chair" ng-click="sendEvent()" ng-class="{taken: isTaken}">sit</button>',
+      templateUrl: 'client/app/views/chairDir.ng.html',
       scope: {
         chairid: '@',
       },
