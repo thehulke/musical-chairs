@@ -1,8 +1,17 @@
 <div class="container-fluid outer-block">
+
   <div class="main-block center-block">
-    <div class="btns center-block">
-      <input class="input-name form-control center-block" placeholder="Nickname" type="text" ng-model="login.playerName">
-      <button class="play-btn btn-block center-block" ng-click="login.playAsGuest()">Play as guest</button>
+    <div class="row">
+      <div class="col-sm-10 col-sm-offset-1">
+        <!-- <div class="btns center-block"> -->
+        <input class="input-name form-control center-block" ng-model="login.playerName" placeholder="Nickname" type="text">
+        <button class="play-btn btn-block center-block" ng-click="login.playAsGuest()">Play as guest</button>
+        <!-- </div> -->
+        <h2 class="text-center" style="color: white">
+          When the background turns <span style="color: rgb(0, 177, 92)">GREEN</span>
+          <strong>click on a chair!</strong>
+        </h2>
+      </div>
     </div>
   </div>
 </div>
