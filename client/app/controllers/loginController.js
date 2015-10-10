@@ -16,7 +16,7 @@
 
       playerId = Random.id();
 
-      if (!freeRoom) {
+      if (!freeRoom._id) {
         emptyRoom = angular.copy(EMPTYROOM);
         emptyRoom.players.push({
           _id: playerId,

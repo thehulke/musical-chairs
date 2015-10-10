@@ -48,7 +48,7 @@
     }
 
     function findOneEmpty() {
-      return $meteor.object(Room, {gameStart: false});
+      return $meteor.object(Room, {gameStart: false}, false);
     }
 
     function create(roomDetails) {
@@ -70,7 +70,6 @@
       room.players.push(player);
 
       room.save();
-
       return room;
     }
 
