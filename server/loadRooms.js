@@ -1,12 +1,12 @@
-  // Room.remove({});
-  Meteor.startup(function() {
+Room.remove({});
+Meteor.startup(function() {
   if (Room.find().count() === 0) {
     var room = [{
-      "gameStart": false,
-      "players": [{
-        "name": "hadas "
+      gameStart: false,
+      players: [{
+        name: 'hadas',
       }, {
-        "name ": "lior "
+        name: "lior"
       }, {
         "name ": "amit "
       }, {
