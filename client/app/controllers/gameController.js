@@ -18,8 +18,21 @@
     function init() {
       roomService.enterRoom($stateParams.gameId);
       roomService.setTimer(1000, 3000);
+      _this.room.finished = false;
 
       $scope.$watch(timerWatcher, timerAction, true);
+      $scope.$watch(function() {
+        return _this.room.finished;
+      },
+
+      function(newVal, oldVal) {
+        if (newVal) {
+          announceWinners();
+          restartGame();
+        }
+      },
+
+      true);
     }
 
     function timerWatcher() {
@@ -43,7 +56,9 @@
         if (_this.clickable && !_this.room.chairs[args.chairId]) {
           _this.room.chairs[args.chairId] = Session.get('currentPlayer');
           _this.clickable = false;
-          alert('you have a sit');
+          if (chackTakenSits(_this.room.chairs)) {
+            _this.room.finished = true;
+          }
         } else if (_this.room.chairs[args.chairId]) {
           alert('sit is taken');
         } else {
@@ -54,6 +69,43 @@
       }
     }
 
+    function chackTakenSits(chairs) {
+      var full = true;
+      var i;
+      for (i = 0; i < chairs.length; i++) {
+        if (!chairs[i]) {
+          full = false;
+        }
+      }
+
+      return full;
+    }
+
+    function restartGame() {
+
+    }
+
+    function announceWinners() {
+      var i;
+      var j;
+      var winner = false;
+
+      for (i = 0; i < _this.room.chairs.length; i++) {
+        if (_this.room.chairs[i] === Session.get('currentPlayer')) {
+          winner = true;
+        }
+      }
+
+      if (winner) {
+        alert('you win!');
+      } else {
+        alert('you lose :(');
+        for (j = 0; j < _this.room.players.length; j++) {
+          _this.room.players.splice(j, 1);
+        }
+      }
+
+    }
   }
 
 }(angular));

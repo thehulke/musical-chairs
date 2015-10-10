@@ -50,3 +50,6 @@ main {
   outline: none;
   border: 2px solid white;
 }
+.chair.taken {
+  background: red;
+}
