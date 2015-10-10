@@ -1,9 +1,9 @@
 (function(angular) {
 
   angular.module('chairGame')
-    .factory('roomService', ['$meteor', roomService]);
+    .factory('roomService', ['$meteor', 'MAXPLAYERS', roomService]);
 
-  function roomService($meteor) {
+  function roomService($meteor, MAXPLAYERS) {
     var roomId;
 
     service = {
@@ -30,9 +30,7 @@
 
       var room = $meteor.object(Room, roomId, false);
       var randTimeOut = (Math.random() * (max - min)) + min;
-      console.log(randTimeOut);
-      var timeOutDate = Math.round((new Date()).getTime() / 1000);
-      console.log(timeOutDate);
+      var timeOutDate = Date.now();
       if (room.gameStart) {
         room.timer = Math.floor(timeOutDate + randTimeOut);
         room.save();
@@ -63,7 +61,6 @@
 
     function create(roomDetails) {
       Session.set('currentPlayer', roomDetails.players[0]._id);
-      console.log(Session.get('currentPlayer'));
       return Room.insert(roomDetails);
     }
 
@@ -72,7 +69,7 @@
       var player = playerDetails;
       player._id = Random.id();
 
-      if (room.players.length >= 4) {
+      if (room.players.length >= MAXPLAYERS - 1) {
         room.gameStart = true;
       }
 

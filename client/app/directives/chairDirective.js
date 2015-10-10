@@ -7,15 +7,23 @@
   function chairDirective() {
     return {
       restrict: 'E',
-      template: '<div class="chair">x</div>',
-      link: chairDirectiveLink,
+      template: '<button class="chair" ng-click="sendEvent()">sit</button>',
+      scope: {
+        chairid: '@',
+      },
+      controller: chairDirectiveController,
     };
 
     ////////////////////////////
 
-    function chairDirectiveLink(scope, elem) {
+    function chairDirectiveController($rootScope, $scope) {
 
+      $scope.sendEvent = function() {
+        $rootScope.$broadcast('chair-clicked', {chairId: $scope.chairid - 1});
+      };
     }
+
+    chairDirectiveController.inject(['$rootScope', '$scope']);
   }
 
 }(angular));

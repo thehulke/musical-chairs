@@ -34,7 +34,7 @@
           elem.children().remove();
 
           for (i = 1; i <= newVal; i++) {
-            elem.append($compile('<chair-directive></chair-directive>')(scope));
+            elem.append($compile('<chair-directive chairId="' + i + '"></chair-directive>')(scope));
           }
 
           currentChairs = newVal;
