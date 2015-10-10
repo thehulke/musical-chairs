@@ -21,3 +21,4 @@ insecure                # Allow all DB writes from clients (for prototyping)
 angular
 urigo:angular-ui-router
 angular:angular-animate
+angular:angular-cookies
