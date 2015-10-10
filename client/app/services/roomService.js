@@ -50,6 +50,8 @@
     }
 
     function create(roomDetails) {
+      Session.set('currentPlayer', roomDetails.players[0]._id);
+      console.log(Session.get('currentPlayer'));
       return Room.insert(roomDetails);
     }
 
@@ -67,7 +69,6 @@
       room.players.push(player);
 
       return Room.update(roomId, room);
-
     }
 
   }
