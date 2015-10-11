@@ -1,7 +1,7 @@
 (function(angular) {
 
   angular.module('chairGame')
-    .config(['$stateProvider', '$urlRouterProvider', router]);
+    .config(router);
 
   function router($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise('/login');
@@ -21,5 +21,7 @@
     });
 
   }
+
+  router.$inject = ['$stateProvider', '$urlRouterProvider'];
 
 }(angular));

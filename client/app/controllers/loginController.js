@@ -2,7 +2,7 @@
   console.log('login controller');
 
   angular.module('chairGame')
-    .controller('LoginCtrl', ['gameService', '$state', 'EMPTYROOM', LoginCtrl]);
+    .controller('LoginCtrl', LoginCtrl);
 
   function LoginCtrl(gameService, $state, EMPTYROOM) {
     var _this = this;
@@ -35,5 +35,7 @@
       $state.go('game', {gameId: gameId});
     };
   }
+
+  LoginCtrl.$inject = ['gameService', '$state', 'EMPTYROOM'];
 
 }(angular));

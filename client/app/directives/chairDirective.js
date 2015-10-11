@@ -2,7 +2,7 @@
   console.log('chair directive');
 
   angular.module('chairGame')
-    .directive('chairDirective', [chairDirective]);
+    .directive('chairDirective', chairDirective);
 
   function chairDirective() {
     return {
@@ -32,7 +32,7 @@
       };
     }
 
-    chairDirectiveController.inject(['$rootScope', '$scope']);
+    chairDirectiveController.$inject = ['$rootScope', '$scope'];
   }
 
 }(angular));

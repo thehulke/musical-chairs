@@ -1,7 +1,7 @@
 (function(angular) {
 
   angular.module('chairGame')
-    .factory('gameService', ['$meteor', 'MAXPLAYERS', gameService]);
+    .factory('gameService', gameService);
 
   function gameService($meteor, MAXPLAYERS) {
     var gameId;
@@ -83,5 +83,7 @@
       return gameId;
     }
   }
+
+gameService.$inject = ['$meteor', 'MAXPLAYERS'];
 
 }(angular));

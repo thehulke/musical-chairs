@@ -2,7 +2,7 @@
   console.log('chair holder directive');
 
   angular.module('chairGame')
-    .directive('chairHolderDirective', ['$compile', chairHolderDirective]);
+    .directive('chairHolderDirective', chairHolderDirective);
 
   function chairHolderDirective($compile) {
     return {
@@ -43,5 +43,7 @@
 
     }
   }
+
+  chairHolderDirective.$inject = ['$compile'];
 
 }(angular));

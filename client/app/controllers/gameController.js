@@ -2,7 +2,7 @@
   console.log('game controller');
 
   angular.module('chairGame')
-    .controller('GameCtrl', ['$scope', 'gameService', '$stateParams', '$state', '$timeout', '$meteor', '$rootScope', GameCtrl]);
+    .controller('GameCtrl', GameCtrl);
 
   function GameCtrl($scope, gameService, $stateParams, $state, $timeout, $meteor, $rootScope) {
     var _this = this;
@@ -136,5 +136,7 @@
 
     }
   }
+
+  GameCtrl.$inject = ['$scope', 'gameService', '$stateParams', '$state', '$timeout', '$meteor', '$rootScope'];
 
 }(angular));
