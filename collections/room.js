@@ -1,7 +1,7 @@
-Room = new Mongo.Collection('rooms');
+Game = new Mongo.Collection('games');
 
 /**
-Room {
+Game {
   gameStart: boolean,
   players: [
     {

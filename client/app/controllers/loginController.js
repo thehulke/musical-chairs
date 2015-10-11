@@ -2,31 +2,31 @@
   console.log('login controller');
 
   angular.module('chairGame')
-    .controller('LoginCtrl', ['roomService', '$state', 'EMPTYROOM', LoginCtrl]);
+    .controller('LoginCtrl', ['gameService', '$state', 'EMPTYROOM', LoginCtrl]);
 
-  function LoginCtrl(roomService, $state, EMPTYROOM) {
+  function LoginCtrl(gameService, $state, EMPTYROOM) {
     var _this = this;
 
     _this.playAsGuest = function() {
-      var freeRoom = roomService.findOneEmpty();
+      var freeGame = gameService.findOneEmpty();
       var playerName = _this.playerName;
       var gameId;
       var playerId;
-      var emptyRoom;
+      var emptyGame;
 
       playerId = Random.id();
 
-      if (!freeRoom._id) {
-        emptyRoom = angular.copy(EMPTYROOM);
-        emptyRoom.players.push({
+      if (!freeGame._id) {
+        emptyGame = angular.copy(EMPTYROOM);
+        emptyGame.players.push({
           _id: playerId,
           name: playerName,
         });
 
-        gameId = roomService.create(emptyRoom);
+        gameId = gameService.create(emptyGame);
       } else {
-        gameId = freeRoom._id;
-        roomService.addPlayer(freeRoom._id, {
+        gameId = freeGame._id;
+        gameService.addPlayer(freeGame._id, {
           name: playerName,
         });
 

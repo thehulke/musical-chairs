@@ -1,13 +1,13 @@
 (function(angular) {
 
   angular.module('chairGame')
-    .factory('roomService', ['$meteor', 'MAXPLAYERS', roomService]);
+    .factory('gameService', ['$meteor', 'MAXPLAYERS', gameService]);
 
-  function roomService($meteor, MAXPLAYERS) {
-    var roomId;
+  function gameService($meteor, MAXPLAYERS) {
+    var gameId;
 
     service = {
-      enterRoom: enterRoom,
+      enterGame: enterGame,
       findEmpty: findEmpty,
       create: create,
       addPlayer: addPlayer,
@@ -15,7 +15,7 @@
       getParticipents: getParticipents,
       setTimer: setTimer,
       getTimer: getTimer,
-      getRoomId: getRoomId,
+      getGameId: getGameId,
     };
 
     return service;
@@ -27,60 +27,60 @@
     }
 
     function setTimer(min, max) {
-      var room = $meteor.object(Room, roomId, false);
+      var game = $meteor.object(Game, gameId, false);
       var randTimeOut = (Math.random() * (max - min)) + min;
       var timeOutDate = Date.now();
-      if (room.gameStart) {
-        room.timer = Math.floor(timeOutDate + randTimeOut);
-        room.save();
+      if (game.gameStart) {
+        game.timer = Math.floor(timeOutDate + randTimeOut);
+        game.save();
       }
 
     }
 
     function getParticipents() {
-      var room = $meteor.object(Room, roomId);
-      return room.players.length;
+      var game = $meteor.object(Game, gameId);
+      return game.players.length;
     }
 
-    function enterRoom(newRoomId) {
-      roomId = newRoomId;
+    function enterGame(newGameId) {
+      gameId = newGameId;
     }
 
     function findEmpty() {
-      return $meteor.collection(Room, {
+      return $meteor.collection(Game, {
         gameStart: false,
       });
     }
 
     function findOneEmpty() {
-      return $meteor.object(Room, {
+      return $meteor.object(Game, {
         gameStart: false,
       }, false);
     }
 
-    function create(roomDetails) {
-      Session.set('currentPlayer', roomDetails.players[0]._id);
-      return Room.insert(roomDetails);
+    function create(gameDetails) {
+      Session.set('currentPlayer', gameDetails.players[0]._id);
+      return Game.insert(gameDetails);
     }
 
-    function addPlayer(roomId, playerDetails) {
-      var room = $meteor.object(Room, roomId, false);
+    function addPlayer(gameId, playerDetails) {
+      var game = $meteor.object(Game, gameId, false);
       var player = playerDetails;
       player._id = Random.id();
 
-      if (room.players.length >= MAXPLAYERS - 1) {
-        room.gameStart = true;
+      if (game.players.length >= MAXPLAYERS - 1) {
+        game.gameStart = true;
       }
 
       Session.set('currentPlayer', player._id);
-      room.players.push(player);
+      game.players.push(player);
 
-      room.save();
-      return room;
+      game.save();
+      return game;
     }
 
-    function getRoomId() {
-      return roomId;
+    function getGameId() {
+      return gameId;
     }
   }
 

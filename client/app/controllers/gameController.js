@@ -2,28 +2,28 @@
   console.log('game controller');
 
   angular.module('chairGame')
-    .controller('GameCtrl', ['$scope', 'roomService', '$stateParams', '$state', '$timeout', '$meteor', '$rootScope', GameCtrl]);
+    .controller('GameCtrl', ['$scope', 'gameService', '$stateParams', '$state', '$timeout', '$meteor', '$rootScope', GameCtrl]);
 
-  function GameCtrl($scope, roomService, $stateParams, $state, $timeout, $meteor, $rootScope) {
+  function GameCtrl($scope, gameService, $stateParams, $state, $timeout, $meteor, $rootScope) {
     var _this = this;
     var eventRun = false;
 
-    _this.room = $meteor.object(Room, $stateParams.gameId);
+    _this.game = $meteor.object(Game, $stateParams.gameId);
     _this.clickable = false;
-    _this.playersList = removeNullPlayers(_this.room.players);
+    _this.playersList = removeNullPlayers(_this.game.players);
 
     init();
 
     ///////////////////////////
 
     function init() {
-      roomService.enterRoom($stateParams.gameId);
-      roomService.setTimer(1000, 3000);
-      _this.room.finished = false;
+      gameService.enterGame($stateParams.gameId);
+      gameService.setTimer(1000, 3000);
+      _this.game.finished = false;
 
       $scope.$watch(timerWatcher, timerAction, true);
       $scope.$watch(function() {
-        return _this.room.finished;
+        return _this.game.finished;
       },
 
       function(newVal, oldVal) {
@@ -36,11 +36,11 @@
       true);
 
       $scope.$watch(function() {
-        return _this.room.players;
+        return _this.game.players;
       },
 
       function(newVal, oldVal) {
-        _this.playersList = removeNullPlayers(_this.room.players);
+        _this.playersList = removeNullPlayers(_this.game.players);
       },
 
       true);
@@ -48,7 +48,7 @@
     }
 
     function timerWatcher() {
-      return _this.room.timer;
+      return _this.game.timer;
     }
 
     function timerAction(newVal, oldVal) {
@@ -65,13 +65,13 @@
     function clickAction(event, args) {
       if (!eventRun) {
         eventRun = true;
-        if (_this.clickable && !_this.room.chairs[args.chairId]) {
-          _this.room.chairs[args.chairId] = Session.get('currentPlayer');
+        if (_this.clickable && !_this.game.chairs[args.chairId]) {
+          _this.game.chairs[args.chairId] = Session.get('currentPlayer');
           _this.clickable = false;
-          if (chackTakenSits(_this.room.chairs)) {
-            _this.room.finished = true;
+          if (chackTakenSits(_this.game.chairs)) {
+            _this.game.finished = true;
           }
-        } else if (_this.room.chairs[args.chairId]) {
+        } else if (_this.game.chairs[args.chairId]) {
           alert('sit is taken');
         } else {
           alert('you clicked to early');
@@ -115,8 +115,8 @@
       var j;
       var winner = false;
 
-      for (i = 0; i < _this.room.chairs.length; i++) {
-        if (_this.room.chairs[i] === Session.get('currentPlayer')) {
+      for (i = 0; i < _this.game.chairs.length; i++) {
+        if (_this.game.chairs[i] === Session.get('currentPlayer')) {
           winner = true;
         }
       }
@@ -125,9 +125,9 @@
         alert('you win!');
       } else {
         alert('you lose :(');
-        for (j = 0; j < _this.room.players.length; j++) {
-          if (_this.room.players[j] && Session.get('currentPlayer') === _this.room.players[j]._id) {
-            _this.room.players[j] = null;
+        for (j = 0; j < _this.game.players.length; j++) {
+          if (_this.game.players[j] && Session.get('currentPlayer') === _this.game.players[j]._id) {
+            _this.game.players[j] = null;
             break;
           }
         }

@@ -19,11 +19,11 @@
     function chairDirectiveController($rootScope, $scope) {
 
       $scope.$watch(function() {
-        return $scope.$parent.$parent.game.room.chairs[$scope.chairid - 1];
+        return $scope.$parent.$parent.game.game.chairs[$scope.chairid - 1];
       },
 
       function(newVal, oldVal) {
-        $scope.isTaken = $scope.$parent.$parent.game.room.chairs[$scope.chairid - 1];
+        $scope.isTaken = $scope.$parent.$parent.game.game.chairs[$scope.chairid - 1];
       },
 
       true);

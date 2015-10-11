@@ -1,9 +1,9 @@
 Meteor.startup(function() {
 
-  Room.remove({});
+  Game.remove({});
 
-  // if (Room.find().count() === 0) {
-  //   var room = [{
+  // if (Game.find().count() === 0) {
+  //   var game = [{
   //     gameStart: false,
   //     players: [{
   //       name: 'hadas',
@@ -42,16 +42,16 @@ Meteor.startup(function() {
   //     }]
   //   }];
   //   for (var x = 0; x < 3; x++) {
-  //     Room.insert(room[x]);
+  //     Game.insert(game[x]);
   //   }
   // }
   //
-  // // console log free room
-  // var z = Room.find({$where: "this.players.length === 5"}).count();
-  // var indexId = Room.find({$where: "this.players.length === 5"}).fetch();
+  // // console log free game
+  // var z = Game.find({$where: "this.players.length === 5"}).count();
+  // var indexId = Game.find({$where: "this.players.length === 5"}).fetch();
   //
   // for(y=0; y<z; y++){
   //   // modify the gamestart
-  //   Room.update({ _id: String(indexId[y]._id)}, {$set: {gameStart: true}});
+  //   Game.update({ _id: String(indexId[y]._id)}, {$set: {gameStart: true}});
   // }
 });
