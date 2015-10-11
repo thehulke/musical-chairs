@@ -86,7 +86,12 @@
      * status 3 mean the game is finished
      */
     gameFactory.prototype.setStatus = function(newStatus) {
-      this.game.status = newStatus;
+      if(newStatus > this.game.status) {
+        this.game.status = newStatus;
+      } else {
+        console.warn('you try to set status to lower level');
+      }
+      this.game.save();
     }
 
     gameFactory.prototype.getStatus = function() {

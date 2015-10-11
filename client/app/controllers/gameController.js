@@ -7,6 +7,8 @@
   function GameCtrl($scope, gameService, $stateParams, $state, $timeout, $meteor, $rootScope) {
     var vm = this;
     var game;
+    var activeAction = false;
+    var isGameOver = false;
 
     vm.clickable = false;
     vm.numberOfChairs = 0;
@@ -21,22 +23,23 @@
 
       $scope.$watch(timerWatcher, timerAction, true);
       $scope.$watch(chairsWatcher, chairUpdator, true);
-      $scope.$watch(statusWatcher, onStatusChange, true);
+      $timeout(statusChange, 10);
     }
 
-    function statusWatcher() {
-      return game.getStatus();
-    }
-
-    function onStatusChange(newVal, oldVal) {
-      if(newVal === 2) {
+    function statusChange() {
+      if(game.getStatus() === 2) {
         gameOver();
       }
+
+      $timeout(statusChange, 10);
     }
 
     function gameOver() {
-      announceWinners();
-      restartGame();
+      if(!isGameOver) {
+        announceWinners();
+        restartGame();
+        isGameOver = true;
+      }
     }
 
     function chairsWatcher() {
@@ -54,24 +57,28 @@
     function timerAction(newVal, oldVal) {
       if (newVal > 0) {
         game.setStatus(1);
-        $timeout(toggleClickable, newVal - Date.now());
+        $timeout(function(){ vm.clickable = true; }, newVal - Date.now());
       }
 
       $scope.$on('chair-clicked', clickAction);
     }
 
-    function toggleClickable() {
-      vm.clickable = !vm.clickable;
-    }
-
     function clickAction(event, args) {
-      if (vm.clickable && !game.checkTakenChair(args.chairId)) {
-        game.playerSitOnChair(args.chairId) == game.getParticipents() - 1 ? game.setStatus(2) : '';
-        toggleClickable();
-      } else if (game.checkTakenChair(args.chairId)) {
-        alert('sit is taken');
-      } else {
-        alert('you clicked to early');
+      if(!activeAction) {
+        activeAction = true;
+
+        if (vm.clickable && !game.checkTakenChair(args.chairId)) {
+          if (game.playerSitOnChair(args.chairId) == game.getParticipents() - 1) {
+            game.setStatus(2);
+          }
+          vm.clickable = false;
+        } else if (game.checkTakenChair(args.chairId)) {
+          alert('sit is taken');
+        } else {
+          alert('you clicked to early');
+        }
+
+        $timeout(function(){activeAction = false;}, 10)
       }
 
     }
@@ -81,8 +88,6 @@
     }
 
     function announceWinners() {
-      var i;
-      var j;
       var winner = game.checkIfPlayerWin();
 
       if (winner) {
