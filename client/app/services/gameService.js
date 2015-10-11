@@ -3,87 +3,129 @@
   angular.module('chairGame')
     .factory('gameService', gameService);
 
-  function gameService($meteor, MAXPLAYERS) {
-    var gameId;
+  function gameService($meteor, MAXPLAYERS, EMPTYROOM) {
 
-    service = {
-      enterGame: enterGame,
-      findEmpty: findEmpty,
-      create: create,
-      addPlayer: addPlayer,
-      findOneEmpty: findOneEmpty,
-      getParticipents: getParticipents,
-      setTimer: setTimer,
-      getTimer: getTimer,
-      getGameId: getGameId,
-    };
-
-    return service;
-
-    ////////////////////////////
-
-    function getTimer() {
-      //
+    function gameFactory(gameId) {
+      if (!gameId) {
+        console.error('gameId is not defined');
+      }
+      this.gameId = gameId;
+      this.game = $meteor.object(Game, gameId, false);
     }
 
-    function setTimer(min, max) {
-      var game = $meteor.object(Game, gameId, false);
+    gameFactory.prototype.getChair = function(chairId) {
+      return this.game.chairs[chairId];
+    }
+
+    gameFactory.prototype.setTimer = function(min, max) {
       var randTimeOut = (Math.random() * (max - min)) + min;
       var timeOutDate = Date.now();
-      if (game.gameStart) {
-        game.timer = Math.floor(timeOutDate + randTimeOut);
-        game.save();
+      if (this.getStatus() === 1) {
+        this.game.timer = Math.floor(timeOutDate + randTimeOut);
+        this.game.save();
       }
-
     }
 
-    function getParticipents() {
-      var game = $meteor.object(Game, gameId);
-      return game.players.length;
+    gameFactory.prototype.getTimer = function() {
+      return this.game.timer;
     }
 
-    function enterGame(newGameId) {
-      gameId = newGameId;
+    gameFactory.prototype.getParticipents = function() {
+      return this.game.players.length;
     }
 
-    function findEmpty() {
-      return $meteor.collection(Game, {
-        gameStart: false,
-      });
+    gameFactory.findEmptyGame = function() {
+      var emptyGame = $meteor.object(Game, {status: 0}, false);
+      return emptyGame._id;
     }
 
-    function findOneEmpty() {
-      return $meteor.object(Game, {
-        gameStart: false,
-      }, false);
+    gameFactory.create = function(gameDetails) {
+      var newGame = Game.insert(EMPTYROOM);
+      return newGame;
     }
 
-    function create(gameDetails) {
-      Session.set('currentPlayer', gameDetails.players[0]._id);
-      return Game.insert(gameDetails);
-    }
-
-    function addPlayer(gameId, playerDetails) {
-      var game = $meteor.object(Game, gameId, false);
+    gameFactory.prototype.addPlayer = function(playerDetails) {
       var player = playerDetails;
       player._id = Random.id();
 
-      if (game.players.length >= MAXPLAYERS - 1) {
-        game.gameStart = true;
+      if (this.getParticipents() >= MAXPLAYERS - 1) {
+        this.setStatus(1);
       }
 
       Session.set('currentPlayer', player._id);
-      game.players.push(player);
+      this.game.players.push(player);
 
-      game.save();
-      return game;
+      this.game.save();
+      return player._id;
     }
 
-    function getGameId() {
-      return gameId;
+    gameFactory.prototype.checkTakenChair = function(chairNumber) {
+      return !!this.game.chairs[chairNumber];
     }
+
+    gameFactory.prototype.playerSitOnChair = function(chairNumber) {
+      var i;
+      var counter = 0;
+
+      this.game.chairs[chairNumber] = Session.get('currentPlayer');
+      this.game.save();
+
+      for(i = 0; i < this.game.chairs.length; i++) {
+        if (this.game.chairs[i]) {
+          counter ++;
+        }
+      }
+
+      return counter;
+    }
+
+    /**
+     * status 0 mean the game didn't started yet
+     * status 1 mean the game is on
+     * status 2 mean the round is finished
+     * status 3 mean the game is finished
+     */
+    gameFactory.prototype.setStatus = function(newStatus) {
+      this.game.status = newStatus;
+    }
+
+    gameFactory.prototype.getStatus = function() {
+      return this.game.status;
+    }
+
+    gameFactory.prototype.checkIfPlayerWin = function() {
+      var i;
+
+      for(i = 0; i < this.game.chairs.length; i++) {
+        if (this.game.chairs[i] === Session.get('currentPlayer')) {
+          return true;
+        }
+      }
+
+      return false;
+    }
+
+    gameFactory.prototype.getPlayerIndex = function() {
+      var i;
+
+      for(i = 0; i < this.game.players.length; i++) {
+        if(this.game.players[i]._id === Session.get('currentPlayer')) {
+          return i;
+        }
+      }
+    }
+
+    gameFactory.prototype.removePlayerFromCurrentGame = function() {
+      var index = this.getPlayerIndex();
+
+      this.game.players.splice(index, 1);
+      this.game.save();
+    }
+
+    return gameFactory;
+
   }
 
-gameService.$inject = ['$meteor', 'MAXPLAYERS'];
+gameService.$inject = ['$meteor', 'MAXPLAYERS', 'EMPTYROOM'];
 
 }(angular));

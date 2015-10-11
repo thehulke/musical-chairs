@@ -4,38 +4,25 @@
   angular.module('chairGame')
     .controller('LoginCtrl', LoginCtrl);
 
-  function LoginCtrl(gameService, $state, EMPTYROOM) {
-    var _this = this;
+  function LoginCtrl(gameService, $state) {
+    var vm = this;
 
-    _this.playAsGuest = function() {
-      var freeGame = gameService.findOneEmpty();
-      var playerName = _this.playerName;
-      var gameId;
-      var playerId;
-      var emptyGame;
+    vm.playAsGuest = function() {
+      var gameId = gameService.findEmptyGame();
+      var playerName = vm.playerName;
+      var game;
 
-      playerId = Random.id();
-
-      if (!freeGame._id) {
-        emptyGame = angular.copy(EMPTYROOM);
-        emptyGame.players.push({
-          _id: playerId,
-          name: playerName,
-        });
-
-        gameId = gameService.create(emptyGame);
-      } else {
-        gameId = freeGame._id;
-        gameService.addPlayer(freeGame._id, {
-          name: playerName,
-        });
-
+      if (!gameId) {
+        gameId = gameService.create();
       }
+
+      game = new gameService(gameId);
+      game.addPlayer({name: playerName});
 
       $state.go('game', {gameId: gameId});
     };
   }
 
-  LoginCtrl.$inject = ['gameService', '$state', 'EMPTYROOM'];
+  LoginCtrl.$inject = ['gameService', '$state'];
 
 }(angular));

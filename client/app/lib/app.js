@@ -3,14 +3,14 @@
 
   // Setting const empty game value
   var emptyGameConst = {
-    gameStart: false,
+    status: 0,
     timer: 0,
     players: [],
     chairs: [],
   };
 
   angular.module('chairGame', ['angular-meteor', 'ui.router', 'ngAnimate'])
-    .constant('MAXPLAYERS', 4)
+    .constant('MAXPLAYERS', 2)
     .constant('EMPTYROOM', emptyGameConst);
 
 }(angular));

@@ -5,133 +5,91 @@
     .controller('GameCtrl', GameCtrl);
 
   function GameCtrl($scope, gameService, $stateParams, $state, $timeout, $meteor, $rootScope) {
-    var _this = this;
-    var eventRun = false;
+    var vm = this;
+    var game;
 
-    _this.game = $meteor.object(Game, $stateParams.gameId);
-    _this.clickable = false;
-    _this.playersList = removeNullPlayers(_this.game.players);
+    vm.clickable = false;
+    vm.numberOfChairs = 0;
 
     init();
 
     ///////////////////////////
 
     function init() {
-      gameService.enterGame($stateParams.gameId);
-      gameService.setTimer(1000, 3000);
-      _this.game.finished = false;
+      game = new gameService($stateParams.gameId);
+      game.setTimer(1000, 3000);
 
       $scope.$watch(timerWatcher, timerAction, true);
-      $scope.$watch(function() {
-        return _this.game.finished;
-      },
+      $scope.$watch(chairsWatcher, chairUpdator, true);
+      $scope.$watch(statusWatcher, onStatusChange, true);
+    }
 
-      function(newVal, oldVal) {
-        if (newVal) {
-          announceWinners();
-          restartGame();
-        }
-      },
+    function statusWatcher() {
+      return game.getStatus();
+    }
 
-      true);
+    function onStatusChange(newVal, oldVal) {
+      if(newVal === 2) {
+        gameOver();
+      }
+    }
 
-      $scope.$watch(function() {
-        return _this.game.players;
-      },
+    function gameOver() {
+      announceWinners();
+      restartGame();
+    }
 
-      function(newVal, oldVal) {
-        _this.playersList = removeNullPlayers(_this.game.players);
-      },
+    function chairsWatcher() {
+      return game.getParticipents();
+    }
 
-      true);
-
+    function chairUpdator(newVal, oldVal) {
+      vm.numberOfChairs = newVal - 1;
     }
 
     function timerWatcher() {
-      return _this.game.timer;
+      return game.getTimer();
     }
 
     function timerAction(newVal, oldVal) {
       if (newVal > 0) {
-        console.log(newVal, Date.now());
-        $timeout(function() {
-          _this.clickable = true;
-        }, newVal - Date.now());
+        game.setStatus(1);
+        $timeout(toggleClickable, newVal - Date.now());
       }
 
       $scope.$on('chair-clicked', clickAction);
     }
 
-    function clickAction(event, args) {
-      if (!eventRun) {
-        eventRun = true;
-        if (_this.clickable && !_this.game.chairs[args.chairId]) {
-          _this.game.chairs[args.chairId] = Session.get('currentPlayer');
-          _this.clickable = false;
-          if (chackTakenSits(_this.game.chairs)) {
-            _this.game.finished = true;
-          }
-        } else if (_this.game.chairs[args.chairId]) {
-          alert('sit is taken');
-        } else {
-          alert('you clicked to early');
-        }
-
-        $timeout(function() {eventRun = false;}, 100);
-      }
+    function toggleClickable() {
+      vm.clickable = !vm.clickable;
     }
 
-    function chackTakenSits(chairs) {
-      var full = true;
-      var i;
-      for (i = 0; i < chairs.length; i++) {
-        if (!chairs[i]) {
-          full = false;
-        }
+    function clickAction(event, args) {
+      if (vm.clickable && !game.checkTakenChair(args.chairId)) {
+        game.playerSitOnChair(args.chairId) == game.getParticipents() - 1 ? game.setStatus(2) : '';
+        toggleClickable();
+      } else if (game.checkTakenChair(args.chairId)) {
+        alert('sit is taken');
+      } else {
+        alert('you clicked to early');
       }
 
-      return full;
     }
 
     function restartGame() {
       $state.go('login');
     }
 
-    function removeNullPlayers(playersList) {
-      var i;
-      var newArr = [];
-
-      for (i = 0; i < playersList.length; i++) {
-        if (playersList[i]) {
-          newArr.push(playersList[i]);
-        }
-      }
-
-      return newArr;
-    }
-
     function announceWinners() {
       var i;
       var j;
-      var winner = false;
-
-      for (i = 0; i < _this.game.chairs.length; i++) {
-        if (_this.game.chairs[i] === Session.get('currentPlayer')) {
-          winner = true;
-        }
-      }
+      var winner = game.checkIfPlayerWin();
 
       if (winner) {
         alert('you win!');
       } else {
         alert('you lose :(');
-        for (j = 0; j < _this.game.players.length; j++) {
-          if (_this.game.players[j] && Session.get('currentPlayer') === _this.game.players[j]._id) {
-            _this.game.players[j] = null;
-            break;
-          }
-        }
-
+        game.removePlayerFromCurrentGame();
       }
 
     }

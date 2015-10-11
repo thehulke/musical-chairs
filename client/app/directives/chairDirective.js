@@ -16,14 +16,15 @@
 
     ////////////////////////////
 
-    function chairDirectiveController($rootScope, $scope) {
+    function chairDirectiveController($rootScope, $scope, gameService, $stateParams) {
+      var game = new gameService($stateParams.gameId);
 
       $scope.$watch(function() {
-        return $scope.$parent.$parent.game.game.chairs[$scope.chairid - 1];
+        return game.getChair($scope.chairid - 1);
       },
 
       function(newVal, oldVal) {
-        $scope.isTaken = $scope.$parent.$parent.game.game.chairs[$scope.chairid - 1];
+        $scope.isTaken = !!game.getChair($scope.chairid - 1);
       },
 
       true);
@@ -32,7 +33,7 @@
       };
     }
 
-    chairDirectiveController.$inject = ['$rootScope', '$scope'];
+    chairDirectiveController.$inject = ['$rootScope', '$scope', 'gameService', '$stateParams'];
   }
 
 }(angular));
