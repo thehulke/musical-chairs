@@ -19,7 +19,7 @@
 
     function init() {
       game = new gameService($stateParams.gameId);
-      game.setTimer(1000, 3000);
+      game.setTimer(3000, 10000);
 
       $scope.$watch(timerWatcher, timerAction, true);
       $scope.$watch(chairsWatcher, chairUpdator, true);
@@ -27,7 +27,13 @@
     }
 
     function statusChange() {
-      if(game.getStatus() === 2) {
+      var gameStatus = game.getStatus();
+
+      if (gameStatus === 2) {
+        vm.clickable = true;
+      }
+
+      if(gameStatus === 3) {
         gameOver();
       }
 
@@ -57,7 +63,6 @@
     function timerAction(newVal, oldVal) {
       if (newVal > 0) {
         game.setStatus(1);
-        $timeout(function(){ vm.clickable = true; }, newVal - Date.now());
       }
 
       $scope.$on('chair-clicked', clickAction);
@@ -69,7 +74,7 @@
 
         if (vm.clickable && !game.checkTakenChair(args.chairId)) {
           if (game.playerSitOnChair(args.chairId) == game.getParticipents() - 1) {
-            game.setStatus(2);
+            game.setStatus(3);
           }
           vm.clickable = false;
         } else if (game.checkTakenChair(args.chairId)) {
@@ -78,7 +83,7 @@
           alert('you clicked to early');
         }
 
-        $timeout(function(){activeAction = false;}, 10)
+        $timeout(function(){activeAction = false;}, 10);
       }
 
     }

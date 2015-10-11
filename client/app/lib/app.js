@@ -4,7 +4,6 @@
   // Setting const empty game value
   var emptyGameConst = {
     status: 0,
-    timer: 0,
     players: [],
     chairs: [],
   };

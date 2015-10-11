@@ -21,8 +21,9 @@
       var randTimeOut = (Math.random() * (max - min)) + min;
       var timeOutDate = Date.now();
       if (this.getStatus() === 1) {
-        this.game.timer = Math.floor(timeOutDate + randTimeOut);
-        this.game.save();
+        $meteor.call('set_timer', this.gameId, Math.floor(timeOutDate + randTimeOut));
+        // this.game.timer = Math.floor(timeOutDate + randTimeOut);
+        // this.game.save();
       }
     }
 
@@ -82,8 +83,9 @@
     /**
      * status 0 mean the game didn't started yet
      * status 1 mean the game is on
-     * status 2 mean the round is finished
-     * status 3 mean the game is finished
+     * status 2 mean the timer stop and people can sit
+     * status 3 mean the round is finished
+     * status 4 mean the game is finished
      */
     gameFactory.prototype.setStatus = function(newStatus) {
       if(newStatus > this.game.status) {
