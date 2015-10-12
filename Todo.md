@@ -1,4 +1,4 @@
-##Todo
+#Todo
 * Design:
  * Add person sit when catching a chair
  * Background change to a color with more contrast
